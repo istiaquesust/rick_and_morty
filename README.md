@@ -7,6 +7,7 @@
 2. Clone the Repository
 
   Open your terminal and run:
+  
     git clone https://github.com/istiaquesust/rick_and_morty.git
     cd rick_and_morty
 
