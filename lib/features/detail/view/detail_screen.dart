@@ -22,15 +22,6 @@ class _DetailScreen extends State<DetailScreen> {
   final _containerColor = Color.fromRGBO(40, 40, 40, 0.55);
   bool _isFavorite = false;
 
-  int id = 0;
-  String name = '';
-  String status = 'unknown';
-  String species = '';
-  String gender = '';
-  String type = '';
-  String origin = '';
-  String location = '';
-
   final LocalDb _db = LocalDb();
 
   // 1. Initialize controllers with current character data
@@ -61,7 +52,9 @@ class _DetailScreen extends State<DetailScreen> {
 
     // 1. Get the data
     _isFavorite = context.watch<DetailProvider>().isfavorite;
-    _character = context.watch<CharactersListProvider>().getCharacterById(widget.id);
+    _character = context.watch<CharactersListProvider>().getCharacterById(
+      widget.id,
+    );
 
     // 2. GUARD: Only update controllers if the text is actually different.
     // This prevents the "setState during build" crash.
@@ -71,15 +64,11 @@ class _DetailScreen extends State<DetailScreen> {
       speciesController.text = _character['species'] ?? '';
       genderController.text = _character['gender'] ?? '';
       typeController.text = _character['type'] ?? '';
-      
+
       // Safe nesting check
-      originController.text = _character['origin'] is Map 
-          ? (_character['origin']['name'] ?? '') 
-          : (_character['origin'] ?? '');
-          
-      locationController.text = _character['location'] is Map 
-          ? (_character['location']['name'] ?? '') 
-          : (_character['location'] ?? '');
+      originController.text = (_character['origin']['name'] ?? '');
+
+      locationController.text = (_character['location']['name'] ?? '');
     }
   }
 
@@ -394,7 +383,7 @@ class _DetailScreen extends State<DetailScreen> {
     // 1. Save to Local DB
     // Assuming these controllers were defined in your dialog
     _db.saveEditedCharacter(
-      id: id,
+      id: _character['id'],
       name: nameController.text,
       status: statusController.text,
       species: speciesController.text,

@@ -51,6 +51,7 @@ class LocalDb {
       _editedCharactersKey,
       defaultValue: [],
     );
+    print('editedList: $editedList');
 
     // Create the new data map
     Map<String, dynamic> updatedData = {

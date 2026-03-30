@@ -26,12 +26,13 @@ class CustomText extends StatelessWidget {
   Text build(BuildContext context) {
     return Text(
       text!,
-      style: GoogleFonts.luckiestGuy( // <--- Change the font family here
-      color: color ?? color5,
-      fontSize: fontSize ?? 14, // Simplified null check
-      fontWeight: fontWeight ?? FontWeight.normal,
-      letterSpacing: 1.2, // Bouncy fonts look better with a little space
-    ),
+      style: GoogleFonts.luckiestGuy(
+        // <--- Change the font family here
+        color: color ?? color5,
+        fontSize: fontSize ?? 14, // Simplified null check
+        fontWeight: fontWeight ?? FontWeight.normal,
+        letterSpacing: 1.2, // Bouncy fonts look better with a little space
+      ),
       textAlign: textAlign ?? TextAlign.left,
       overflow: overflow ?? TextOverflow.ellipsis,
       maxLines: maxLines,

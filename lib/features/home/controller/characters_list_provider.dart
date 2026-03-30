@@ -125,14 +125,14 @@ class CharactersListProvider extends ChangeNotifier {
     }
   }
 
-  Map<String, dynamic> getCharacterById(int id) {
-  // 1. Search the _content list for the matching ID
-  return _content.firstWhere(
-    (character) => character['id'] == id,
-    // 2. Safety: If the ID isn't in the list, return an empty Map to prevent crashes
-    orElse: () => {}, 
-  );
-}
+  Map getCharacterById(int id) {
+    // 1. Search the _content list for the matching ID
+    return _content.firstWhere(
+      (character) => character['id'] == id,
+      // 2. Safety: If the ID isn't in the list, return an empty Map to prevent crashes
+      orElse: () => {},
+    );
+  }
 
   void _handleOffline() {
     String key = 'character_list_$page';

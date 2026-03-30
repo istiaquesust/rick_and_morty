@@ -182,8 +182,7 @@ class _HomeScreen extends State<HomeScreen> {
                 decoration: BoxDecoration(
                   color: color2, // Matches your other buttons
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: color4
-                  ),
+                  border: Border.all(color: color4),
                 ),
                 child: Icon(
                   Icons.refresh_rounded,
@@ -212,7 +211,6 @@ class _HomeScreen extends State<HomeScreen> {
 
   // Initial Fetch & Refresh
   Future<void> _initialSetUp(String loadingType) async {
-    
     await context.read<CharactersListProvider>().updateContent(
       loagingType: loadingType,
     );

@@ -37,7 +37,7 @@ class ApiManager {
     String response,
   ) {
     if (kDebugMode) {
-       print('requestUrl: $requestUrl');
+      //print('requestUrl: $requestUrl');
       // print('statusCode: $statusCode');
       // print('response: $response');
     }

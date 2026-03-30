@@ -22,15 +22,6 @@ class _FavoriteDetail extends State<FavoriteDetail> {
   final _containerColor = Color.fromRGBO(40, 40, 40, 0.55);
   bool _isFavorite = false;
 
-  int id = 0;
-  String name = '';
-  String status = 'unknown';
-  String species = '';
-  String gender = '';
-  String type = '';
-  String origin = '';
-  String location = '';
-
   final LocalDb _db = LocalDb();
 
   // 1. Initialize controllers with current character data
@@ -61,15 +52,20 @@ class _FavoriteDetail extends State<FavoriteDetail> {
 
     _isFavorite = context.watch<DetailProvider>().isfavorite;
     _character = context.watch<FavoriteProvider>().getCharacterById(widget.id);
-    nameController.text = _character['name'];
-    statusController.text = _character['status'];
-    speciesController.text = _character['species'];
-    genderController.text = _character['gender'];
-    typeController.text = _character['type'];
-    originController.text =
-        _character['origin']['name'] ?? _character['origin'] ?? '';
-    locationController.text =
-        _character['location']['name'] ?? _character['location'] ?? '';
+    // 2. GUARD: Only update controllers if the text is actually different.
+    // This prevents the "setState during build" crash.
+    if (nameController.text != _character['name']) {
+      nameController.text = _character['name'] ?? '';
+      statusController.text = _character['status'] ?? '';
+      speciesController.text = _character['species'] ?? '';
+      genderController.text = _character['gender'] ?? '';
+      typeController.text = _character['type'] ?? '';
+
+      // Safe nesting check
+      originController.text = (_character['origin']['name'] ?? '');
+
+      locationController.text = (_character['location']['name'] ?? '');
+    }
   }
 
   @override
@@ -86,7 +82,7 @@ class _FavoriteDetail extends State<FavoriteDetail> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              // 1. Hero Image (Optional: adds a smooth transition animation)
+              // 1. Image (Optional: adds a smooth transition animation)
               Stack(
                 children: [
                   // 1. The Main Character Image
@@ -383,7 +379,7 @@ class _FavoriteDetail extends State<FavoriteDetail> {
     // 1. Save to Local DB
     // Assuming these controllers were defined in your dialog
     _db.saveEditedCharacter(
-      id: id,
+      id: _character['id'],
       name: nameController.text,
       status: statusController.text,
       species: speciesController.text,
@@ -430,7 +426,7 @@ class _FavoriteDetail extends State<FavoriteDetail> {
     if (!mounted) return;
     // Automatically hide the banner after 3 seconds
     Future.delayed(const Duration(seconds: 3), () {
-      if(!mounted) return;
+      if (!mounted) return;
       ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
     });
   }

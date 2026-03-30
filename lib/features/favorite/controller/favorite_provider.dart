@@ -10,9 +10,9 @@ class FavoriteProvider extends ChangeNotifier {
   void initiateFavoriteCharctersListProvider() async {
     // 1. Reset the list to avoid duplicates on refresh
     _favoriteList = [];
-    
+
     // 2. Get the list of IDs: e.g., [56, 3, 1]
-    List favoriteIdList = _db.getFavoritesFromDB(); 
+    List favoriteIdList = _db.getFavoritesFromDB();
 
     for (var id in favoriteIdList) {
       // 3. Apply your formula: (56 ~/ 20) + 1 = 3
@@ -29,7 +29,7 @@ class FavoriteProvider extends ChangeNotifier {
         (char) => char['id'] == id,
         orElse: () => null,
       );
-     Map editedCharacter = getUpdatedCharacter(character);
+      Map editedCharacter = getUpdatedCharacter(character);
       if (character != null) {
         _favoriteList.add(editedCharacter);
       }
@@ -40,41 +40,42 @@ class FavoriteProvider extends ChangeNotifier {
   }
 
   Map getUpdatedCharacter(Map character) {
-  // 1. Get the ID from the current map
-  int id = character['id'];
+    // 1. Get the ID from the current map
+    int id = character['id'];
 
-  // 2. Check your LocalDb for any user-saved edits
-  Map? editedData = _db.getEditedCharacterById(id);
+    // 2. Check your LocalDb for any user-saved edits
+    Map? editedData = _db.getEditedCharacterById(id);
 
-  // 3. If no edits exist, return the original character as-is
-  if (editedData == null) {
-    return character;
+    // 3. If no edits exist, return the original character as-is
+    if (editedData == null) {
+      return character;
+    }
+
+    // 4. If edits exist, return a NEW map with the updated values
+    // Use the spread operator (...) to keep original fields (like 'image' or 'url')
+    return {
+      ...character,
+      'name': editedData['name'] ?? character['name'],
+      'status': editedData['status'] ?? character['status'],
+      'species': editedData['species'] ?? character['species'],
+      'gender': editedData['gender'] ?? character['gender'],
+      'type': editedData['type'] ?? character['type'],
+      'origin': editedData['origin'] ?? character['origin']['name'],
+      'location': editedData['location'] ?? character['location']['name'],
+    };
   }
 
-  // 4. If edits exist, return a NEW map with the updated values
-  // Use the spread operator (...) to keep original fields (like 'image' or 'url')
-  return {
-    ...character, 
-    'name': editedData['name'] ?? character['name'],
-    'status': editedData['status'] ?? character['status'],
-    'species': editedData['species'] ?? character['species'],
-    'gender': editedData['gender'] ?? character['gender'],
-    'type': editedData['type'] ?? character['type'],
-    'origin': editedData['origin'] ?? character['origin']['name'],
-    'location': editedData['location'] ?? character['location']['name'],
-  };
-}
-Map getCharacterById(int id) {
-  // 1. Search the _favoriteList for the matching ID
-  return _favoriteList.firstWhere(
-    (character) => character['id'] == id,
-    // 2. Safety: If the character isn't found (e.g. just unfavorited)
-    // return an empty map to prevent "StateError: No element"
-    orElse: () => {}, 
-  );
-}
+  Map getCharacterById(int id) {
+    // 1. Search the _favoriteList for the matching ID
+    return _favoriteList.firstWhere(
+      (character) => character['id'] == id,
+      // 2. Safety: If the character isn't found (e.g. just unfavorited)
+      // return an empty map to prevent "StateError: No element"
+      orElse: () => {},
+    );
+  }
 
-void modifyCharacterAfterEdit(int id) {
+  void modifyCharacterAfterEdit(int id) {
     // 1. Find the index of the character in your current UI list (_content)
     int index = _favoriteList.indexWhere((char) => char['id'] == id);
 
@@ -102,5 +103,4 @@ void modifyCharacterAfterEdit(int id) {
       }
     }
   }
-
 }

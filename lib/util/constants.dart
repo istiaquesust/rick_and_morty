@@ -13,12 +13,10 @@ const color4 = Color.fromRGBO(120, 120, 120, 1);
 const color5 = Color.fromRGBO(210, 210, 210, 1);
 const color6 = Color.fromRGBO(91, 3, 180, 1);
 
-
 //base URL
 const baseUrl = "https://rickandmortyapi.com";
 
 //apis
 const getAllCharactersApiEndPoint = "/api/character"; // /api/character?page=1"
-
 
 //messages
